@@ -2,6 +2,8 @@ package com.poo;
 
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.*;
+
+import java.io.File;
 import java.util.List;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -42,8 +44,27 @@ public class InscripcionesPersonas {
 
     public void guardarInformacion() {
         String filePath = "cursos_profesores.xlsx";
-        try (Workbook workbook = new XSSFWorkbook()) {
-            Sheet sheet = workbook.createSheet("Personas");
+        File file = new File(filePath);
+        Workbook workbook;
+        Sheet sheet;
+
+        try {
+            if (file.exists()) {
+                System.out.println("El archivo ya existe. Abriendo...");
+                FileInputStream fileInputStream = new FileInputStream(file);
+                workbook = new XSSFWorkbook(fileInputStream);
+                fileInputStream.close();
+
+                sheet = workbook.getSheet("Personas");
+
+                if (sheet == null) {
+                    sheet = workbook.createSheet("Personas");
+                }
+            } else {
+                System.out.println("El archivo no existe. Creando...");
+                workbook = new XSSFWorkbook();
+                sheet = workbook.createSheet("Personas");
+            }
 
             Row headerRow = sheet.createRow(0);
             headerRow.createCell(0).setCellValue("ID");
@@ -64,6 +85,7 @@ public class InscripcionesPersonas {
                 workbook.write(fileOut);
             }
 
+            workbook.close();
             System.out.println("Datos guardados en la hoja 'Personas'.");
         } catch (IOException e){
             e.printStackTrace();
@@ -91,7 +113,7 @@ public class InscripcionesPersonas {
                     Cell cellApellido = row.getCell(2);
                     Cell cellEmail = row.getCell(3);
 
-                    Integer id = (int) cellId.getNumericCellValue();
+                    Double id = cellId.getNumericCellValue();
                     String nombre = cellNombre.getStringCellValue();
                     String apellido = cellApellido.getStringCellValue();
                     String email = cellEmail.getStringCellValue();

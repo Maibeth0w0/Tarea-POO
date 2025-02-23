@@ -2,6 +2,8 @@ package com.poo;
 
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.*;
+
+import java.io.File;
 import java.util.List;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -42,8 +44,27 @@ public class CursosInscritos implements Servicios {
 
     public void guardarInformacion() {
         String filePath = "cursos_profesores.xlsx";
-        try (Workbook workbook = new XSSFWorkbook()) {
-            Sheet sheet = workbook.createSheet("CursosInscritos");
+        File file = new File(filePath);
+        Workbook workbook;
+        Sheet sheet;
+
+        try {
+            if (file.exists()) {
+                System.out.println("El archivo ya existe. Abriendo...");
+                FileInputStream fileInputStream = new FileInputStream(file);
+                workbook = new XSSFWorkbook(fileInputStream);
+                fileInputStream.close();
+
+                sheet = workbook.getSheet("CursosInscritos");
+
+                if (sheet == null) {
+                    sheet = workbook.createSheet("CursosInscritos");
+                }
+            } else {
+                System.out.println("El archivo no existe. Creando...");
+                workbook = new XSSFWorkbook();
+                sheet = workbook.createSheet("CursosInscritos");
+            }
 
             Row headerRow = sheet.createRow(0);
             headerRow.createCell(0).setCellValue("Curso");
@@ -62,7 +83,8 @@ public class CursosInscritos implements Servicios {
                 workbook.write(fileOut);
             }
 
-            System.out.println("Datos guardados en la hoja 'CursosInscritos'.");
+            workbook.close();
+            System.out.println("Datos guardados en la hoja 'Personas'.");
         } catch (IOException e){
             e.printStackTrace();
         }
@@ -128,9 +150,9 @@ public class CursosInscritos implements Servicios {
     }
 
     @Override
-    public String imprimirPosición(int posición) {
-        if (posición >= 0 && posición < listadoInscripciones.size()) {
-            return listadoInscripciones.get(posición).toString();
+    public String imprimirPosicion(int posicion) {
+        if (posicion >= 0 && posicion < listadoInscripciones.size()) {
+            return listadoInscripciones.get(posicion).toString();
         }
         return "Posición fuera de rango.";
     }

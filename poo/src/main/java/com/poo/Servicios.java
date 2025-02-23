@@ -3,7 +3,7 @@ import java.util.List;
 
 
 public interface Servicios {
-    String imprimirPosición(int posición);
+    String imprimirPosicion(int posicion);
 
     Integer cantidadActual();
 
