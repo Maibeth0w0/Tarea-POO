@@ -1,5 +1,11 @@
 package com.poo;
+
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.xssf.usermodel.*;
 import java.util.List;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class InscripcionesPersonas {
@@ -34,14 +40,71 @@ public class InscripcionesPersonas {
         System.out.println("Persona no encontrada para actualizar.");
     }
 
-    public void guardarInformacion(Persona persona) {
-        System.out.println("Guardando información de: " + persona);
-    } //Método innecesario
+    public void guardarInformacion() {
+        String filePath = "cursos_profesores.xlsx";
+        try (Workbook workbook = new XSSFWorkbook()) {
+            Sheet sheet = workbook.createSheet("Personas");
 
-    public void cargarDatos() {
-        System.out.println("Cargando datos de personas inscritas...");
-        for (Persona p : listadoPersonas) {
-            System.out.println(p);
+            Row headerRow = sheet.createRow(0);
+            headerRow.createCell(0).setCellValue("ID");
+            headerRow.createCell(1).setCellValue("Nombre");
+            headerRow.createCell(2).setCellValue("Apellido");
+            headerRow.createCell(3).setCellValue("Email");
+
+            int rowNum = 1;
+            for (Persona p : listadoPersonas) {
+                Row row = sheet.createRow(rowNum++);
+                row.createCell(0).setCellValue(p.getId());
+                row.createCell(1).setCellValue(p.getNombres());
+                row.createCell(2).setCellValue(p.getApellidos());
+                row.createCell(3).setCellValue(p.getEmail());
+            }
+
+            try (FileOutputStream fileOut = new FileOutputStream(filePath)) {
+                workbook.write(fileOut);
+            }
+
+            System.out.println("Datos guardados en la hoja 'Personas'.");
+        } catch (IOException e){
+            e.printStackTrace();
         }
     }
+
+    public void cargarDatos() {
+        String filePath = "cursos_profesores.xlsx";
+        try (FileInputStream fis = new FileInputStream(filePath);
+            Workbook workbook = new XSSFWorkbook(fis)) {
+
+            Sheet sheet = workbook.getSheet("Personas");
+            if (sheet == null) {
+                System.out.println("La hoja 'Personas' no existe en el archivo.");
+                return;
+            }
+
+            listadoPersonas.clear();
+
+            for (int rowIndex = 1; rowIndex <= sheet.getLastRowNum(); rowIndex++) {
+                Row row = sheet.getRow(rowIndex);
+                if (row != null) {
+                    Cell cellId = row.getCell(0);
+                    Cell cellNombre = row.getCell(1);
+                    Cell cellApellido = row.getCell(2);
+                    Cell cellEmail = row.getCell(3);
+
+                    Integer id = (int) cellId.getNumericCellValue();
+                    String nombre = cellNombre.getStringCellValue();
+                    String apellido = cellApellido.getStringCellValue();
+                    String email = cellEmail.getStringCellValue();
+
+                    Persona persona = new Persona(id, nombre, apellido, email);
+                    listadoPersonas.add(persona);
+                }
+            }
+
+            System.out.println("Datos cargados desde la hoja 'Personas'.");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 }

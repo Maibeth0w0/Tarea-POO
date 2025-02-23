@@ -2,7 +2,7 @@ package com.poo;
 
 public class Persona {
     
-    private Double id;
+    private Integer id;
     private String nombres;
     private String apellidos;
     private String email;
@@ -10,18 +10,18 @@ public class Persona {
     public Persona() {
     }
     
-    public Persona(Double id, String nombres, String apellidos, String email) {
+    public Persona(Integer id, String nombres, String apellidos, String email) {
         this.id = id;
         this.nombres = nombres;
         this.apellidos = apellidos;
         this.email = email;
     }
     
-    public Double getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Double id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

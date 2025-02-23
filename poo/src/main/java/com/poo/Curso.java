@@ -52,7 +52,7 @@ public class Curso {
     public String toString(){
         return "Curso{Id=" + id +
         ", nombre=" + nombre +
-        ", programa=" + programa +
+        ", programa=" + programa.getNombre() +
         ", activo=" + activo +
         "}";
     }

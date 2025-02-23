@@ -2,24 +2,24 @@ package com.poo;
 
 public class Facultad{
 
-    private Double id;
+    private Integer id;
     private String nombre;
     private Persona decano;
 
     public Facultad(){
     }
 
-    public Facultad(Double id, String nombre, Persona decano){
+    public Facultad(Integer id, String nombre, Persona decano){
         this.id=id;
         this.nombre = nombre;
         this.decano = decano;
     }
 
-    public Double getId(){
+    public Integer getId(){
         return id;
     }
 
-    public void setId(Double id){
+    public void setId(Integer id){
         this.id = id;
     }
 
@@ -41,8 +41,8 @@ public class Facultad{
 
     @Override
     public String toString(){
-        return "Facultad{id="+id+
-        ", nombre="+nombre+
-        ", decano="+decano.getNombres()+"}";
+        return "Facultad{id=" + id +
+        ", nombre=" + nombre +
+        ", decano=" + (decano != null ? decano.getNombres() : "Sin decano")+ "}";
     }
 }

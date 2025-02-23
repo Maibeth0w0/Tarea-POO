@@ -2,7 +2,7 @@ package com.poo;
 
 public class Programa {
 
-    private Double id;
+    private Integer id;
     private String nombre;
     private Double duracion;
     private String registro;
@@ -11,7 +11,7 @@ public class Programa {
     public Programa(){
     }
 
-    public Programa( Double id, String nombre, Double duracion, String registro, Facultad facultad){
+    public Programa( Integer id, String nombre, Double duracion, String registro, Facultad facultad){
         this.id = id;
         this.nombre = nombre;
         this.duracion = duracion;
@@ -19,11 +19,11 @@ public class Programa {
         this.facultad = facultad;
     }
 
-    public Double getId(){
+    public Integer getId(){
         return id;
     }
 
-    public void setId(Double id){
+    public void setId(Integer id){
         this.id = id;
     }
 
@@ -61,11 +61,11 @@ public class Programa {
 
     @Override
     public String toString(){
-        return "Programa{Id="+id+
-        ", nombre="+nombre+
-        ", duración="+duracion+
-        ", registro="+registro+
-        ", facultad="+facultad.getNombre()+
+        return "Programa{Id=" + id +
+        ", nombre=" + nombre +
+        ", duración=" + duracion +
+        ", registro=" + registro +
+        ", facultad=" + facultad.getNombre() +
         "}";
     }
 

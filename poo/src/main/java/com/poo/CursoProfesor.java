@@ -47,10 +47,11 @@ public class CursoProfesor {
 
     @Override
     public String toString() {
-        return "CursoProfesor {profesor=" + profesor.getNombres() + profesor.getApellidos() +
+        return "CursoProfesor {profesor=" + profesor.getNombres() + " "
+        + profesor.getApellidos() +
         ", año=" + anno +
         ", semestre=" + semestre +
-        ", curso=" + curso.getNombre() + 
+        ", curso=" + curso.getNombre() +
         "}";
     }
 
