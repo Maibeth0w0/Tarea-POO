@@ -1,152 +1,126 @@
 package com.poo;
 
-import org.apache.poi.ss.usermodel.*;
-import org.apache.poi.xssf.usermodel.*;
-
 import java.io.File;
-import java.util.List;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.List;
+
+import javax.crypto.Cipher;
+import javax.crypto.CipherInputStream;
+import javax.crypto.CipherOutputStream;
+import javax.crypto.KeyGenerator;
+import javax.crypto.SecretKey;
 
 public class CursosInscritos implements Servicios {
     
     private List<Inscripcion> listadoInscripciones;
+    private static final String FILE_PATH = "cursos_inscritos.bin";
+    private static final String KEY_PATH = "cursos_inscritos.key";
+    private SecretKey secretKey;
 
     public CursosInscritos(){
         this.listadoInscripciones = new ArrayList<>();
+        cargarClave();
     }
 
     public void inscribirCurso(Inscripcion inscripcion){
         listadoInscripciones.add(inscripcion);
-        System.out.println("curso insrito: "+ inscripcion.getCurso().getNombre());
-   }
-
-   public void eliminarInscripcion(Inscripcion inscripcion){
-        if (listadoInscripciones.remove(inscripcion)){
-            System.out.println("curso eliminado: "+ inscripcion.getCurso().getNombre());
-        } else {            
-            System.out.println("curso no encontrado en el listado: ");
-        }
-   }
-
-   public void actualizarCurso(Inscripcion cursoActualizado){
-    for (int i = 0; i < listadoInscripciones.size(); i++){
-       if ( listadoInscripciones.get(i).getCurso().getId().equals(cursoActualizado.getCurso().getId())){
-            listadoInscripciones.set(i, cursoActualizado);
-            System.out.println("datos actualizados para: " + cursoActualizado.getCurso().getNombre());
-            return;
-       }
+        System.out.println("Curso inscrito: " + inscripcion.getCurso().getNombre());
     }
-    System.out.println("curso no encontrado para actualizar.");
-   }
+
+    public void eliminarInscripcion(Inscripcion inscripcion){
+        if (listadoInscripciones.remove(inscripcion)){
+            System.out.println("Curso eliminado: " + inscripcion.getCurso().getNombre());
+        } else {            
+            System.out.println("Curso no encontrado en el listado.");
+        }
+    }
+
+    public void actualizarCurso(Inscripcion cursoActualizado){
+        for (int i = 0; i < listadoInscripciones.size(); i++){
+            if (listadoInscripciones.get(i).getCurso().getId().equals(cursoActualizado.getCurso().getId())){
+                listadoInscripciones.set(i, cursoActualizado);
+                System.out.println("Datos actualizados para: " + cursoActualizado.getCurso().getNombre());
+                return;
+            }
+        }
+        System.out.println("Curso no encontrado para actualizar.");
+    }
+
+    private void generarClave() {
+        try {
+            KeyGenerator keyGen = KeyGenerator.getInstance("AES");
+            keyGen.init(128);
+            secretKey = keyGen.generateKey();
+            try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(KEY_PATH))) {
+                oos.writeObject(secretKey);
+            }
+        } catch (NoSuchAlgorithmException | IOException e) {
+            System.err.println("Error generando la clave de cifrado: " + e.getMessage());
+        }
+    }
+
+    private void cargarClave() {
+        File keyFile = new File(KEY_PATH);
+        if (keyFile.exists()) {
+            try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(KEY_PATH))) {
+                secretKey = (SecretKey) ois.readObject();
+            } catch (IOException | ClassNotFoundException e) {
+                System.err.println("Error cargando la clave de cifrado: " + e.getMessage());
+            }
+        } else {
+            generarClave();
+        }
+    }
 
     public void guardarInformacion() {
-        String filePath = "cursos_profesores.xlsx";
-        File file = new File(filePath);
-        Workbook workbook;
-        Sheet sheet;
-
         try {
-            if (file.exists()) {
-                System.out.println("El archivo ya existe. Abriendo...");
-                FileInputStream fileInputStream = new FileInputStream(file);
-                workbook = new XSSFWorkbook(fileInputStream);
-                fileInputStream.close();
+            Cipher cipher = Cipher.getInstance("AES");
+            cipher.init(Cipher.ENCRYPT_MODE, secretKey);
 
-                sheet = workbook.getSheet("CursosInscritos");
+            try (CipherOutputStream cos = new CipherOutputStream(new FileOutputStream(FILE_PATH), cipher);
+                 ObjectOutputStream oos = new ObjectOutputStream(cos)) {
 
-                if (sheet == null) {
-                    sheet = workbook.createSheet("CursosInscritos");
-                }
-            } else {
-                System.out.println("El archivo no existe. Creando...");
-                workbook = new XSSFWorkbook();
-                sheet = workbook.createSheet("CursosInscritos");
+                oos.writeObject(listadoInscripciones);
+                System.out.println("Datos guardados en archivo binario cifrado.");
             }
-
-            Row headerRow = sheet.createRow(0);
-            headerRow.createCell(0).setCellValue("Curso");
-            headerRow.createCell(1).setCellValue("Estudiante");
-            headerRow.createCell(2).setCellValue("Programa");
-
-            int rowNum = 1;
-            for (Inscripcion ci : listadoInscripciones) {
-                Row row = sheet.createRow(rowNum++);
-                row.createCell(0).setCellValue(ci.getCurso().getNombre());
-                row.createCell(1).setCellValue(ci.getEstudiante().getNombres() + " " + ci.getEstudiante().getApellidos());
-                row.createCell(2).setCellValue(ci.getCurso().getPrograma().getNombre());
-            }
-
-            try (FileOutputStream fileOut = new FileOutputStream(filePath)) {
-                workbook.write(fileOut);
-            }
-
-            workbook.close();
-            System.out.println("Datos guardados en la hoja 'Personas'.");
-        } catch (IOException e){
-            e.printStackTrace();
+        } catch (Exception e) {
+            System.err.println("Error al guardar la información: " + e.getMessage());
         }
     }
 
     public void cargarDatos() {
-        String filePath = "cursos_profesores.xlsx";
-        try (FileInputStream fis = new FileInputStream(filePath);
-            Workbook workbook = new XSSFWorkbook(fis)) {
-
-            Sheet sheet = workbook.getSheet("CursosInscritos");
-            if (sheet == null) {
-                System.out.println("La hoja 'CursosInscritos' no existe en el archivo.");
-                return;
-            }
-
-            listadoInscripciones.clear();
-
-            for (int rowIndex = 1; rowIndex <= sheet.getLastRowNum(); rowIndex++) {
-                Row row = sheet.getRow(rowIndex);
-                if (row != null) {
-                    String nombreCurso = row.getCell(0).getStringCellValue();
-                    String nombreCompletoEstudiante = row.getCell(1).getStringCellValue();
-                    String nombrePrograma = row.getCell(2).getStringCellValue();
-
-                    Programa programa = new Programa();
-                    programa.setNombre(nombrePrograma);
-
-                    Curso curso = new Curso();
-                    curso.setNombre(nombreCurso);
-                    curso.setPrograma(programa);
-
-                    Estudiante estudiante = new Estudiante();
-                    String[] partes = nombreCompletoEstudiante.split(" ", 2);
-                    if (partes.length == 2) {
-                        estudiante.setNombres(partes[0]);
-                        estudiante.setApellidos(partes[1]);
-                    } else {
-                        estudiante.setNombres(nombreCompletoEstudiante);
-                        estudiante.setApellidos("");
-                    }
-
-                    Inscripcion inscripcion = new Inscripcion(curso, 2023, 1, estudiante);
-
-                    listadoInscripciones.add(inscripcion);
-                }
-            }
-
-            System.out.println("Datos cargados desde la hoja 'CursosInscritos'.");
-
-        } catch (IOException e) {
-            e.printStackTrace();
+        File file = new File(FILE_PATH);
+        if (!file.exists()) {
+            System.out.println("No hay datos previos para cargar.");
+            return;
         }
-}
 
+        try {
+            Cipher cipher = Cipher.getInstance("AES");
+            cipher.init(Cipher.DECRYPT_MODE, secretKey);
+
+            try (CipherInputStream cis = new CipherInputStream(new FileInputStream(FILE_PATH), cipher);
+                 ObjectInputStream ois = new ObjectInputStream(cis)) {
+
+                listadoInscripciones = (List<Inscripcion>) ois.readObject();
+                System.out.println("Datos cargados desde archivo binario cifrado.");
+            }
+        } catch (Exception e) {
+            System.err.println("Error al cargar la información: " + e.getMessage());
+        }
+    }
 
     @Override
     public String toString() {
-        return "CursosInscritos {"+
-        "listadoInscripciones=" + listadoInscripciones + 
-        ", toString()=" + super.toString()
-        + "}";
+        return "CursosInscritos {" +
+                "listadoInscripciones=" + listadoInscripciones + 
+                "}";
     }
 
     @Override
@@ -170,7 +144,4 @@ public class CursosInscritos implements Servicios {
         }
         return nombres;
     }
-
-
-    
 }
