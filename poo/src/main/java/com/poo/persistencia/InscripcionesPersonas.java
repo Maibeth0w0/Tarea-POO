@@ -33,8 +33,9 @@ public class InscripcionesPersonas {
 
     public InscripcionesPersonas() {
         this.listadoPersonas = new ArrayList<>();
-        cargarClave();
         cargarDatos();
+        cargarClave();
+        
     }
     
     private void generateAndSaveKey() {
@@ -92,19 +93,15 @@ public class InscripcionesPersonas {
         for (int i = 0; i < listadoPersonas.size(); i++) {
             Persona personaExistente = listadoPersonas.get(i);
             if (personaExistente.getId().equals(personaActualizada.getId())) {
-                // Solo actualiza los campos que no son nulos en personaActualizada
+                // Actualiza los campos que no son nulos en personaActualizada
                 if (personaActualizada.getNombres() != null) {
                     personaExistente.setNombres(personaActualizada.getNombres());
                 }
                 if (personaActualizada.getApellidos() != null) {
                     personaExistente.setApellidos(personaActualizada.getApellidos());
                 }
-                if (personaActualizada.getEmail() != null) {
-                    personaExistente.setEmail(personaActualizada.getEmail());
-                }
                 // Agrega condiciones para otros campos según sea necesario...
     
-                System.out.println("Listado actualizado de personas: " + listadoPersonas);
                 guardarInformacion(); // Guarda los cambios
                 System.out.println("Persona actualizada: " + personaExistente.getNombres() + " " + personaExistente.getApellidos());
                 return;
@@ -112,9 +109,6 @@ public class InscripcionesPersonas {
         }
         System.out.println("Persona no encontrada para actualizar.");
     }
-    
-    
-    
     
     
 
@@ -130,7 +124,7 @@ public class InscripcionesPersonas {
              CipherOutputStream cos = new CipherOutputStream(fos, getCipher(Cipher.ENCRYPT_MODE));
              ObjectOutputStream oos = new ObjectOutputStream(cos)) {
             
-            System.out.println("Listado de personas a guardar: " + listadoPersonas);
+                System.out.println("Listado de personas a guardar: " + listadoPersonas);
             oos.writeObject(listadoPersonas);
             System.out.println("Datos guardados encriptados en 'inscripcionPersonas.bin'.");
         } catch (Exception e) {
