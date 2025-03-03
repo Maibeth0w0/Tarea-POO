@@ -1,9 +1,13 @@
 package com.poo.modelos;
 import java.io.Serializable;
 
+import jakarta.persistence.Id;
+
+
 public class Persona implements Serializable { // Implementamos Serializable
     private static final long serialVersionUID = 1L; // Asegura compatibilidad en la serialización
     
+    @Id
     private Double id;
     private String nombres;
     private String apellidos;

@@ -3,17 +3,8 @@ package com.poo.servicios;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.poo.modelos.Curso;
-import com.poo.modelos.CursoProfesor;
-import com.poo.modelos.Estudiante;
-import com.poo.modelos.Facultad;
-import com.poo.modelos.Inscripcion;
-import com.poo.modelos.Persona;
-import com.poo.modelos.Profesor;
-import com.poo.modelos.Programa;
-import com.poo.persistencia.CursosInscritos;
-import com.poo.persistencia.CursosProfesores;
-import com.poo.persistencia.InscripcionesPersonas;
+import com.poo.modelos.*;
+import com.poo.persistencia.*;
 
 public class GestorDatos {
     private List<Profesor> listaProfesores;
