@@ -90,7 +90,7 @@ public class InscripcionesPersonasPanel extends JPanel {
         }
     }
 
-    private void inscribirPersona() {
+    /*private void inscribirPersona() {
         Double id = Double.parseDouble(txtId.getText());
         String nombre = txtNombre.getText();
         String apellido = txtApellido.getText();
@@ -100,7 +100,36 @@ public class InscripcionesPersonasPanel extends JPanel {
         inscripciones.inscribirPersona(persona);
         inscripciones.guardarInformacion();
         actualizarTabla();
+    }*/
+    private void inscribirPersona() {
+        try {
+            Double id = Double.parseDouble(txtId.getText());
+            String nombre = txtNombre.getText().trim();
+            String apellido = txtApellido.getText().trim();
+            String email = txtEmail.getText().trim();
+    
+            // Validar que los campos no estén vacíos
+            if (nombre.isEmpty() || apellido.isEmpty() || email.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Todos los campos deben estar llenos.");
+                return;
+            }
+    
+            Persona persona = new Persona(id, nombre, apellido, email);
+            inscripciones.inscribirPersona(persona);
+            inscripciones.guardarInformacion();
+            actualizarTabla();
+    
+            // Limpiar campos
+            txtId.setText("");
+            txtNombre.setText("");
+            txtApellido.setText("");
+            txtEmail.setText("");
+    
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "El ID debe ser un número válido.");
+        }
     }
+    
 
     private void eliminarPersona() {
         int row = table.getSelectedRow();
@@ -114,7 +143,7 @@ public class InscripcionesPersonasPanel extends JPanel {
         }
     }
 
-    private void actualizarPersona() {
+   /*  private void actualizarPersona() {
         int row = table.getSelectedRow();
         if (row >= 0) {
             Double id = (Double) tableModel.getValueAt(row, 0);
@@ -129,7 +158,39 @@ public class InscripcionesPersonasPanel extends JPanel {
         } else {
             JOptionPane.showMessageDialog(this, "Selecciona una persona para actualizar.");
         }
+    }*/
+    private void actualizarPersona() {
+        int row = table.getSelectedRow();
+        if (row >= 0) {
+            Double id = (Double) tableModel.getValueAt(row, 0);
+            
+            // Obtener la persona existente para mantener los datos que no se cambian
+            Persona personaExistente = inscripciones.buscarPersonaPorId(id);
+            if (personaExistente != null) {
+                String nuevoNombre = txtNombre.getText().trim();
+                String nuevoApellido = txtApellido.getText().trim();
+                String nuevoEmail = txtEmail.getText().trim();
+                
+                // Si los nuevos campos están vacíos, mantener los valores existentes
+                personaExistente.setNombres(nuevoNombre.isEmpty() ? personaExistente.getNombres() : nuevoNombre);
+                personaExistente.setApellidos(nuevoApellido.isEmpty() ? personaExistente.getApellidos() : nuevoApellido);
+                personaExistente.setEmail(nuevoEmail.isEmpty() ? personaExistente.getEmail() : nuevoEmail);
+               
+                System.out.println("Persona encontrada: " + personaExistente.getNombres());
+
+                // Actualizar la persona
+                inscripciones.actualizarPersona(personaExistente);
+                inscripciones.guardarInformacion();
+                actualizarTabla();
+            } else {
+                JOptionPane.showMessageDialog(this, "No se pudo encontrar la persona.");
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "Selecciona una persona para actualizar.");
+        }
     }
+    
+    
 
     private void cargarListadoEnBD() {
         JOptionPane.showMessageDialog(this, "Funcionalidad pendiente: Cargar listado en la base de datos");

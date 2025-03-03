@@ -19,8 +19,13 @@ import javax.crypto.SecretKey;
 import com.poo.modelos.Inscripcion;
 import com.poo.servicios.Servicios;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+
+@Entity
+
 public class CursosInscritos implements Servicios {
-    
+    @Id
     private List<Inscripcion> listadoInscripciones;
     private static final String FILE_PATH = "cursos_inscritos.bin";
     private static final String KEY_PATH = "cursos_inscritos.key";

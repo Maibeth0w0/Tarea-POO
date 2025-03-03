@@ -3,6 +3,8 @@ package com.poo.ui;
 
 import java.util.List;
 
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
 import com.poo.modelos.Curso;
 import com.poo.modelos.CursoProfesor;
 import com.poo.modelos.Estudiante;
@@ -15,6 +17,8 @@ import com.poo.persistencia.CursosInscritos;
 import com.poo.persistencia.CursosProfesores;
 import com.poo.persistencia.InscripcionesPersonas;
 
+@SpringBootApplication
+
 public class Main {
     public static void main(String[] args) {
 
@@ -22,6 +26,7 @@ public class Main {
         CursosProfesores cursosProfesores = new CursosProfesores();
         InscripcionesPersonas inscripcionesPersonas = new InscripcionesPersonas();
         CursosInscritos cursosInscritos = new CursosInscritos();
+
 
         // Cargar información desde los archivos binarios cifrados
         inscripcionesPersonas.cargarDatos();
@@ -35,6 +40,7 @@ public class Main {
         // Crear personas
         Persona p1 = new Persona(1.0, "Luis", "Martínez", "luis@email.com");
         Persona p2 = new Persona(2.0, "Ana", "Gómez", "ana@email.com");
+        
 
         // Crear facultades
         Facultad facultad1 = new Facultad(9, "Básicas e Ingeniería", p1);

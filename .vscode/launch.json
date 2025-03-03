@@ -2,6 +2,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "Main",
+            "request": "launch",
+            "mainClass": "com.poo.ui.Main",
+            "projectName": "poo"
+        },
+        {
+            "type": "java",
             "name": "Spring Boot-Main<poo>",
             "request": "launch",
             "cwd": "${workspaceFolder}",

@@ -1,12 +1,18 @@
 package com.poo.servicios;
 
-import com.poo.modelos.CursoProfesor;
-import com.poo.persistencia.CursosProfesores;
-
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.poo.modelos.CursoProfesor;
+import com.poo.persistencia.CursosProfesores;
+
+@Service
+
 public class CursoProfesorService {
+    @Autowired
     private List<CursoProfesor> listaAsignaciones;
     private CursosProfesores cursosProfesores;
 

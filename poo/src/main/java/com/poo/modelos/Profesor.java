@@ -1,7 +1,10 @@
 package com.poo.modelos;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
 
+@Entity
 public class Profesor extends Persona {
-    
+    @Id
     private String tipoContrato;
     
     public Profesor() {

@@ -18,7 +18,13 @@ import javax.crypto.SecretKey;
 
 import com.poo.modelos.Persona;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+
+@Entity
+
 public class InscripcionesPersonas {
+    @Id
     private List<Persona> listadoPersonas;
     private static final String FILE_PATH = "inscripcionPersonas.bin";
     private static final String KEY_PATH = "inscripcionPersonas.key";
@@ -28,6 +34,7 @@ public class InscripcionesPersonas {
     public InscripcionesPersonas() {
         this.listadoPersonas = new ArrayList<>();
         cargarClave();
+        cargarDatos();
     }
     
     private void generateAndSaveKey() {
@@ -83,15 +90,33 @@ public class InscripcionesPersonas {
 
     public void actualizarPersona(Persona personaActualizada) {
         for (int i = 0; i < listadoPersonas.size(); i++) {
-            if (listadoPersonas.get(i).getId().equals(personaActualizada.getId())) {
-                listadoPersonas.set(i, personaActualizada);
-                guardarInformacion();
-                System.out.println("Persona actualizada: " + personaActualizada.getNombres());
+            Persona personaExistente = listadoPersonas.get(i);
+            if (personaExistente.getId().equals(personaActualizada.getId())) {
+                // Solo actualiza los campos que no son nulos en personaActualizada
+                if (personaActualizada.getNombres() != null) {
+                    personaExistente.setNombres(personaActualizada.getNombres());
+                }
+                if (personaActualizada.getApellidos() != null) {
+                    personaExistente.setApellidos(personaActualizada.getApellidos());
+                }
+                if (personaActualizada.getEmail() != null) {
+                    personaExistente.setEmail(personaActualizada.getEmail());
+                }
+                // Agrega condiciones para otros campos según sea necesario...
+    
+                System.out.println("Listado actualizado de personas: " + listadoPersonas);
+                guardarInformacion(); // Guarda los cambios
+                System.out.println("Persona actualizada: " + personaExistente.getNombres() + " " + personaExistente.getApellidos());
                 return;
             }
         }
         System.out.println("Persona no encontrada para actualizar.");
     }
+    
+    
+    
+    
+    
 
     public void eliminarPersonaPorId(Double id) {
         listadoPersonas.removeIf(persona -> persona.getId().equals(id));
@@ -100,10 +125,12 @@ public class InscripcionesPersonas {
     }
 
     public void guardarInformacion() {
+        System.out.println("Guardando información...");
         try (FileOutputStream fos = new FileOutputStream(FILE_PATH);
              CipherOutputStream cos = new CipherOutputStream(fos, getCipher(Cipher.ENCRYPT_MODE));
              ObjectOutputStream oos = new ObjectOutputStream(cos)) {
             
+            System.out.println("Listado de personas a guardar: " + listadoPersonas);
             oos.writeObject(listadoPersonas);
             System.out.println("Datos guardados encriptados en 'inscripcionPersonas.bin'.");
         } catch (Exception e) {
@@ -130,6 +157,16 @@ public class InscripcionesPersonas {
             System.err.println("Error al cargar los datos desde 'inscripcionPersonas.bin'");
         }
     }
+
+    public Persona buscarPersonaPorId(Double id) {
+        for (Persona persona : listadoPersonas) {
+            if (persona.getId().equals(id)) {
+                return persona;
+            }
+        }
+        return null; // Retorna null si no se encuentra
+    }
+
 
     private Cipher getCipher(int mode) throws Exception {
         Cipher cipher = Cipher.getInstance(ALGORITHM);

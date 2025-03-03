@@ -1,9 +1,13 @@
 package com.poo.modelos;
 import java.io.Serializable;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+
+@Entity
 public class Curso implements Serializable {
     private static final long serialVersionUID = 1L;
-
+@Id
     private Integer id;
     private String nombre;
     private Programa programa;

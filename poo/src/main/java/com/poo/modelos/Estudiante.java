@@ -1,6 +1,11 @@
 package com.poo.modelos;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+
+@Entity
 
 public class Estudiante extends Persona {
+   @Id
     private Integer codigo;
     private Programa programa;
     private Boolean activo;
