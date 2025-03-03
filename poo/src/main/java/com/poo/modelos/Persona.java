@@ -5,11 +5,11 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 
 @Entity
-public class Persona implements Serializable { // Implementamos Serializable
-    private static final long serialVersionUID = 1L; // Asegura compatibilidad en la serialización
+public class Persona implements Serializable {
+    private static final long serialVersionUID = 1L;
     
     @Id
-    private Double id;
+    private Integer id;
     private String nombres;
     private String apellidos;
     private String email;
@@ -17,18 +17,18 @@ public class Persona implements Serializable { // Implementamos Serializable
     public Persona() {
     }
     
-    public Persona(Double id, String nombres, String apellidos, String email) {
+    public Persona(Integer id, String nombres, String apellidos, String email) {
         this.id = id;
         this.nombres = nombres;
         this.apellidos = apellidos;
         this.email = email;
     }
     
-    public Double getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Double id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -60,11 +60,11 @@ public class Persona implements Serializable { // Implementamos Serializable
     @Override
     public String toString() {
         return "Persona{" +
-               "id=" + id +
-               ", nombres='" + nombres + '\'' +
-               ", apellidos='" + apellidos + '\'' +
-               ", email='" + email + '\'' +
-               '}';
+            "id=" + id +
+            ", nombres='" + nombres + '\'' +
+            ", apellidos='" + apellidos + '\'' +
+            ", email='" + email + '\'' +
+            '}';
     }
 }
 

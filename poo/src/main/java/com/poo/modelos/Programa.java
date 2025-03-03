@@ -5,8 +5,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 
 @Entity
-
 public class Programa implements Serializable{
+
     @Id
     private static final long serialVersionUID = 1L;
 

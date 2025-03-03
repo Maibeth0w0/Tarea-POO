@@ -12,7 +12,7 @@
             "name": "Spring Boot-Main<poo>",
             "request": "launch",
             "cwd": "${workspaceFolder}",
-            "mainClass": "com.poo..ui.Main",
+            "mainClass": "com.poo.ui.Main",
             "projectName": "poo",
             "args": "",
             "envFile": "${workspaceFolder}/.env"

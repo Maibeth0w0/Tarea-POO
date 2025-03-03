@@ -103,7 +103,7 @@ public class InscripcionesPersonasPanel extends JPanel {
     }*/
     private void inscribirPersona() {
         try {
-            Double id = Double.parseDouble(txtId.getText());
+            Integer id = Integer.parseInt(txtId.getText());
             String nombre = txtNombre.getText().trim();
             String apellido = txtApellido.getText().trim();
             String email = txtEmail.getText().trim();
@@ -134,7 +134,7 @@ public class InscripcionesPersonasPanel extends JPanel {
     private void eliminarPersona() {
         int row = table.getSelectedRow();
         if (row >= 0) {
-            Double id = (Double) tableModel.getValueAt(row, 0);
+            Integer id = (Integer) tableModel.getValueAt(row, 0);
             inscripciones.eliminarPersonaPorId(id);
             inscripciones.guardarInformacion();
             actualizarTabla();
@@ -162,7 +162,7 @@ public class InscripcionesPersonasPanel extends JPanel {
     private void actualizarPersona() {
         int row = table.getSelectedRow();
         if (row >= 0) {
-            Double id = (Double) tableModel.getValueAt(row, 0);
+            Integer id = (Integer) tableModel.getValueAt(row, 0);
             
             // Obtener la persona existente para mantener los datos que no se cambian
             Persona personaExistente = inscripciones.buscarPersonaPorId(id);

@@ -22,8 +22,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 
 @Entity
-
 public class InscripcionesPersonas {
+    
     @Id
     private List<Persona> listadoPersonas;
     private static final String FILE_PATH = "inscripcionPersonas.bin";
@@ -68,7 +68,7 @@ public class InscripcionesPersonas {
         }
     }
     
-  
+
     public void inscribirPersona(Persona persona) {
         if (existePersona(persona)) {
             System.out.println("Error: La persona con ID " + persona.getId() + " ya está inscrita.");
@@ -112,7 +112,7 @@ public class InscripcionesPersonas {
     
     
 
-    public void eliminarPersonaPorId(Double id) {
+    public void eliminarPersonaPorId(Integer id) {
         listadoPersonas.removeIf(persona -> persona.getId().equals(id));
         guardarInformacion();
         System.out.println("Persona con ID " + id + " eliminada.");
@@ -121,8 +121,8 @@ public class InscripcionesPersonas {
     public void guardarInformacion() {
         System.out.println("Guardando información...");
         try (FileOutputStream fos = new FileOutputStream(FILE_PATH);
-             CipherOutputStream cos = new CipherOutputStream(fos, getCipher(Cipher.ENCRYPT_MODE));
-             ObjectOutputStream oos = new ObjectOutputStream(cos)) {
+            CipherOutputStream cos = new CipherOutputStream(fos, getCipher(Cipher.ENCRYPT_MODE));
+            ObjectOutputStream oos = new ObjectOutputStream(cos)) {
             
                 System.out.println("Listado de personas a guardar: " + listadoPersonas);
             oos.writeObject(listadoPersonas);
@@ -141,8 +141,8 @@ public class InscripcionesPersonas {
         }
         
         try (FileInputStream fis = new FileInputStream(FILE_PATH);
-             CipherInputStream cis = new CipherInputStream(fis, getCipher(Cipher.DECRYPT_MODE));
-             ObjectInputStream ois = new ObjectInputStream(cis)) {
+            CipherInputStream cis = new CipherInputStream(fis, getCipher(Cipher.DECRYPT_MODE));
+            ObjectInputStream ois = new ObjectInputStream(cis)) {
             
             listadoPersonas = (List<Persona>) ois.readObject();
             System.out.println("Datos cargados correctamente desde 'inscripcionPersonas.bin'.");
@@ -152,13 +152,13 @@ public class InscripcionesPersonas {
         }
     }
 
-    public Persona buscarPersonaPorId(Double id) {
+    public Persona buscarPersonaPorId(Integer id) {
         for (Persona persona : listadoPersonas) {
             if (persona.getId().equals(id)) {
                 return persona;
             }
         }
-        return null; // Retorna null si no se encuentra
+        return null;
     }
 
 

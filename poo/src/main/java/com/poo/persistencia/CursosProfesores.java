@@ -23,8 +23,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 
 @Entity
-
 public class CursosProfesores implements Servicios {
+    
     @Id
     private List<CursoProfesor> listadoCursoProfesores;
     private static final String FILE_PATH = "cursosProfesores.bin";

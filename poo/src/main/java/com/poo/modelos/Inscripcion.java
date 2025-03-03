@@ -5,8 +5,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 
 @Entity
-
 public class Inscripcion implements Serializable {
+    
     @Id
     private static final long serialVersionUID = 1L;
 
@@ -16,7 +16,7 @@ public class Inscripcion implements Serializable {
     private Estudiante estudiante;
     
     public Inscripcion(Curso curso, Integer anno, Integer semestre, Estudiante estudiante) {
-       
+
             if (curso == null) {
                 throw new IllegalArgumentException("El curso no puede ser null");
             }
@@ -68,5 +68,5 @@ public class Inscripcion implements Serializable {
         ", semestre=" + semestre +
         ", estudiante=" + estudiante.toString() +
         "}";
-    }    
+    }
 }

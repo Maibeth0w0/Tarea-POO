@@ -23,8 +23,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 
 @Entity
-
 public class CursosInscritos implements Servicios {
+    
     @Id
     private List<Inscripcion> listadoInscripciones;
     private static final String FILE_PATH = "cursos_inscritos.bin";
@@ -59,7 +59,7 @@ public class CursosInscritos implements Servicios {
     public void eliminarInscripcion(Inscripcion inscripcion){
         if (listadoInscripciones.remove(inscripcion)){
             System.out.println("Curso eliminado: " + inscripcion.getCurso().getNombre());
-        } else {            
+        } else {
             System.out.println("Curso no encontrado en el listado.");
         }
     }
@@ -107,7 +107,7 @@ public class CursosInscritos implements Servicios {
             cipher.init(Cipher.ENCRYPT_MODE, secretKey);
 
             try (CipherOutputStream cos = new CipherOutputStream(new FileOutputStream(FILE_PATH), cipher);
-                 ObjectOutputStream oos = new ObjectOutputStream(cos)) {
+                ObjectOutputStream oos = new ObjectOutputStream(cos)) {
 
                 oos.writeObject(listadoInscripciones);
                 System.out.println("Datos guardados en archivo binario cifrado.");
@@ -129,7 +129,7 @@ public class CursosInscritos implements Servicios {
             cipher.init(Cipher.DECRYPT_MODE, secretKey);
 
             try (CipherInputStream cis = new CipherInputStream(new FileInputStream(FILE_PATH), cipher);
-                 ObjectInputStream ois = new ObjectInputStream(cis)) {
+                ObjectInputStream ois = new ObjectInputStream(cis)) {
 
                 listadoInscripciones = (List<Inscripcion>) ois.readObject();
                 System.out.println("Datos cargados desde archivo binario cifrado.");

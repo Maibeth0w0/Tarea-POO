@@ -3,9 +3,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 
 @Entity
-
-
 public class CursoProfesor {
+    
     @Id
     private Profesor profesor;
     private Integer anno;

@@ -5,10 +5,10 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 
 @Entity
-
 public class Facultad implements Serializable{
     private static final long serialVersionUID = 1L;
-@Id
+    
+    @Id
     private Integer id;
     private String nombre;
     private Persona decano;

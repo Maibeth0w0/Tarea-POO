@@ -7,7 +7,8 @@ import jakarta.persistence.Id;
 @Entity
 public class Curso implements Serializable {
     private static final long serialVersionUID = 1L;
-@Id
+    
+    @Id
     private Integer id;
     private String nombre;
     private Programa programa;
