@@ -7,10 +7,6 @@ import jakarta.persistence.*;
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "tipo", discriminatorType = DiscriminatorType.STRING)
 public class Persona implements Serializable {
-    
-    public enum TipoPersona {
-        ESTUDIANTE, PROFESOR
-    }
 
     private static final long serialVersionUID = 1L;
     
@@ -26,19 +22,14 @@ public class Persona implements Serializable {
     
     @Column(name = "email", unique = true, length = 100)
     private String email;
-
-    @Enumerated(EnumType.STRING)
-    @Column(name = "tipo", insertable = false, updatable = false)
-    private TipoPersona tipo;
     
     public Persona() {
     }
     
-    public Persona(String nombres, String apellidos, String email, TipoPersona tipo) {
+    public Persona(String nombres, String apellidos, String email) {
         this.nombres = nombres;
         this.apellidos = apellidos;
         this.email = email;
-        this.tipo = tipo;
     }
 
     public Integer getId() {
@@ -72,14 +63,6 @@ public class Persona implements Serializable {
     public void setEmail(String email) {
         this.email = email;
     }
-
-    public TipoPersona getTipo() {
-        return tipo;
-    }
-
-    public void setTipo(TipoPersona tipo) {
-        this.tipo = tipo;
-    }
     
     @Override
     public String toString() {
@@ -88,7 +71,6 @@ public class Persona implements Serializable {
             .append(", nombres='").append(nombres)
             .append("', apellidos='").append(apellidos)
             .append("', email='").append(email)
-            .append("', tipo=").append(tipo)
             .append('}').toString();
     }
 }

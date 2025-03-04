@@ -20,7 +20,7 @@ public class Profesor extends Persona {
     }
     
     public Profesor(String nombres, String apellidos, String email, String tipoContrato, Facultad facultad) {
-        super(nombres, apellidos, email, TipoPersona.PROFESOR);
+        super(nombres, apellidos, email);
         this.tipoContrato = tipoContrato;
         this.facultad = facultad;
     }

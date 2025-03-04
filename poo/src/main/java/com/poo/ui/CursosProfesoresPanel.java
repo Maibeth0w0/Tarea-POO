@@ -122,7 +122,7 @@ public class CursosProfesoresPanel extends JPanel {
             return;
         }
 
-        CursoProfesor nuevo = new CursoProfesor(profesorObj, annoInt, semestreInt, cursoObj);
+        CursoProfesor nuevo = new CursoProfesor(profesorObj,cursoObj, annoInt, semestreInt);
         cursosProfesores.inscribirCursoProfesores(nuevo);
         cursosProfesores.guardarInformacion();
 

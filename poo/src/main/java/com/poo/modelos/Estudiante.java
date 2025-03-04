@@ -19,7 +19,7 @@ public class Estudiante extends Persona {
    public Estudiante(){}
 
    public Estudiante(String nombres, String apellidos, String email, Integer codigo, Programa programa, Boolean activo, Double promedio) {
-      super(nombres, apellidos, email, TipoPersona.ESTUDIANTE);
+      super(nombres, apellidos, email);
       this.codigo = codigo;
       this.programa = programa;
       this.activo = activo;

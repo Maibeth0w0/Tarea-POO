@@ -103,7 +103,6 @@ public class InscripcionesPersonasPanel extends JPanel {
     }*/
     private void inscribirPersona() {
         try {
-            Integer id = Integer.parseInt(txtId.getText());
             String nombre = txtNombre.getText().trim();
             String apellido = txtApellido.getText().trim();
             String email = txtEmail.getText().trim();
@@ -114,7 +113,7 @@ public class InscripcionesPersonasPanel extends JPanel {
                 return;
             }
     
-            Persona persona = new Persona(id, nombre, apellido, email);
+            Persona persona = new Persona(nombre, apellido, email);
             inscripciones.inscribirPersona(persona);
             inscripciones.guardarInformacion();
             actualizarTabla();
