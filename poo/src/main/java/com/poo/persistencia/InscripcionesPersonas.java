@@ -93,14 +93,13 @@ public class InscripcionesPersonas {
         for (int i = 0; i < listadoPersonas.size(); i++) {
             Persona personaExistente = listadoPersonas.get(i);
             if (personaExistente.getId().equals(personaActualizada.getId())) {
-                // Actualiza los campos que no son nulos en personaActualizada
+
                 if (personaActualizada.getNombres() != null) {
                     personaExistente.setNombres(personaActualizada.getNombres());
                 }
                 if (personaActualizada.getApellidos() != null) {
                     personaExistente.setApellidos(personaActualizada.getApellidos());
                 }
-                // Agrega condiciones para otros campos según sea necesario...
     
                 guardarInformacion(); // Guarda los cambios
                 System.out.println("Persona actualizada: " + personaExistente.getNombres() + " " + personaExistente.getApellidos());
