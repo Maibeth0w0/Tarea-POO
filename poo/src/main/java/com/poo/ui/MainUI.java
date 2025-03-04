@@ -5,6 +5,7 @@ import javax.swing.JTabbedPane;
 import javax.swing.SwingUtilities;
 
 import com.poo.persistencia.CursosInscritos;
+import com.poo.persistencia.CursosProfesores;
 import com.poo.persistencia.InscripcionesPersonas;
 
 public class MainUI extends JFrame {
@@ -25,9 +26,12 @@ public class MainUI extends JFrame {
         CursosInscritos cursosInscritos = new CursosInscritos();
         cursosInscritos.cargarDatos();
 
+        CursosProfesores cursosProfesores = new CursosProfesores();
+        cursosProfesores.cargarDatos();
+
         // Agregar pestañas
         tabbedPane.addTab("Cursos Inscritos", new CursosInscritosPanel(cursosInscritos));
-        tabbedPane.addTab("Cursos Profesores", new CursosProfesoresPanel());
+        tabbedPane.addTab("Cursos Profesores", new CursosProfesoresPanel(cursosProfesores));
         tabbedPane.addTab("Inscripciones Personas", new InscripcionesPersonasPanel(inscripciones));
 
         // Agregar el tabbedPane a la ventana

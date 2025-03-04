@@ -16,7 +16,9 @@ import javax.crypto.CipherOutputStream;
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 
+import com.poo.modelos.Curso;
 import com.poo.modelos.CursoProfesor;
+import com.poo.modelos.Profesor;
 import com.poo.servicios.Servicios;
 
 import jakarta.persistence.Entity;
@@ -33,7 +35,11 @@ public class CursosProfesores implements Servicios {
 
     public CursosProfesores() {
         this.listadoCursoProfesores = new ArrayList<>();
-        cargarClave();
+        cargarClave(); 
+    }
+
+    public List<CursoProfesor> getListadoCursoProfesores() {
+        return listadoCursoProfesores;
     }
 
     public void inscribirCursoProfesores(CursoProfesor cursoProfesor) {
@@ -66,6 +72,25 @@ public class CursosProfesores implements Servicios {
             generarClave();
         }
     }
+
+    public Profesor obtenerProfesorPorNombre(String nombreProfesor) {
+    for (CursoProfesor cp : listadoCursoProfesores) {
+        if (cp.getProfesor().getNombres().equals(nombreProfesor)) {
+            return cp.getProfesor();
+        }
+    }
+    return null; // Retorna null si no se encuentra el profesor
+    }
+
+    public Curso obtenerCursoPorNombre(String nombreCurso) {
+        for (CursoProfesor cp : listadoCursoProfesores) {
+            if (cp.getCurso().getNombre().equals(nombreCurso)) {
+            return cp.getCurso();
+            }
+        }
+    return null; // Retorna null si no se encuentra el curso
+    }
+
 
     public void guardarInformacion() {
         try {
@@ -132,4 +157,6 @@ public class CursosProfesores implements Servicios {
         }
         return nombres;
     }
+
+    
 }
