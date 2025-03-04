@@ -1,24 +1,28 @@
 package com.poo.modelos;
-import java.io.Serializable;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import java.io.Serializable;
+import jakarta.persistence.*;
 
 @Entity
 public class Curso implements Serializable {
     private static final long serialVersionUID = 1L;
     
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
     private String nombre;
+
+    @ManyToOne
+    @JoinColumn(name = "id_programa")
     private Programa programa;
+
     private Boolean activo;
 
     public Curso(){
     }
 
-    public Curso(Integer id,String nombre, Programa programa, Boolean activo){
-        this.id = id;
+    public Curso(String nombre, Programa programa, Boolean activo){
         this.nombre = nombre;
         this.programa = programa;
         this.activo = activo;
@@ -57,12 +61,13 @@ public class Curso implements Serializable {
     }
 
     @Override
-    public String toString(){
-        return "Curso{Id=" + id +
-        ", nombre=" + nombre +
-        ", programa=" + programa.getNombre() +
-        ", activo=" + activo +
-        "}";
+    public String toString() {
+        return "Curso{" +
+            "id=" + id +
+            ", nombre='" + nombre + '\'' +
+            ", programa=" + (programa != null ? programa.getNombre() : "Sin programa") +
+            ", activo=" + activo +
+            '}';
     }
 
     

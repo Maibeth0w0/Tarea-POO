@@ -1,32 +1,46 @@
 package com.poo.modelos;
-import java.io.Serializable;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import java.io.Serializable;
+import jakarta.persistence.*;
 
 @Entity
 public class Inscripcion implements Serializable {
-    
-    @Id
     private static final long serialVersionUID = 1L;
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
+    
+    @ManyToOne
+    @JoinColumn(name = "id_curso", nullable = false)
     private Curso curso;
+    
     private Integer anno;
     private Integer semestre;
+    
+    @ManyToOne
+    @JoinColumn(name = "id_estudiante", nullable = false)
     private Estudiante estudiante;
     
-    public Inscripcion(Curso curso, Integer anno, Integer semestre, Estudiante estudiante) {
+    public Inscripcion(){
+    }
 
-            if (curso == null) {
-                throw new IllegalArgumentException("El curso no puede ser null");
-            }
-            if (estudiante == null) {
-                throw new IllegalArgumentException("El estudiante no puede ser null");
-            }
+    public Inscripcion(Curso curso, Integer anno, Integer semestre, Estudiante estudiante) {
+        if (curso == null || estudiante == null) {
+            throw new IllegalArgumentException("Curso y Estudiante no pueden ser nulos");
+        }
         this.curso = curso;
         this.anno = anno;
         this.semestre = semestre;
         this.estudiante = estudiante;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public Curso getCurso() {
@@ -63,10 +77,12 @@ public class Inscripcion implements Serializable {
 
     @Override
     public String toString() {
-        return "Inscripcion {curso=" + curso.toString() +
-        ", año=" + anno +
-        ", semestre=" + semestre +
-        ", estudiante=" + estudiante.toString() +
-        "}";
+        return "Inscripcion{" +
+            "id=" + id +
+            ", curso=" + (curso != null ? curso.getNombre() : "Sin curso") +
+            ", año=" + anno +
+            ", semestre=" + semestre +
+            ", estudiante=" + (estudiante != null ? estudiante.getNombres() : "Sin estudiante") +
+            '}';
     }
 }

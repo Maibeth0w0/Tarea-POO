@@ -1,25 +1,30 @@
 package com.poo.modelos;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+
+import jakarta.persistence.*;
 
 @Entity
+@DiscriminatorValue("ESTUDIANTE")
 public class Estudiante extends Persona {
    
-   @Id
+   @Column(name = "codigo", unique = true)
    private Integer codigo;
+   
+   @ManyToOne
+   @JoinColumn(name = "id_programa")
    private Programa programa;
+   
    private Boolean activo;
    private Double promedio;
 
    public Estudiante(){}
 
-   public Estudiante(Integer id, String nombres, String apellidos, String email, Integer codigo, Programa programa, Boolean activo, Double promedio){
-      super(id, nombres, apellidos, email);
+   public Estudiante(String nombres, String apellidos, String email, Integer codigo, Programa programa, Boolean activo, Double promedio) {
+      super(nombres, apellidos, email, TipoPersona.ESTUDIANTE);
       this.codigo = codigo;
       this.programa = programa;
       this.activo = activo;
       this.promedio = promedio;
-   }
+}
 
    public Integer getCodigo(){
       return codigo;

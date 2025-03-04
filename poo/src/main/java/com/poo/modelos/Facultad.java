@@ -1,23 +1,26 @@
 package com.poo.modelos;
 import java.io.Serializable;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 @Entity
 public class Facultad implements Serializable{
     private static final long serialVersionUID = 1L;
     
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
     private String nombre;
-    private Persona decano;
+
+    @ManyToOne
+    @JoinColumn(name = "id_decano")
+    private Profesor decano;
 
     public Facultad(){
     }
 
-    public Facultad(Integer id, String nombre, Persona decano){
-        this.id=id;
+    public Facultad(String nombre, Profesor decano){
         this.nombre = nombre;
         this.decano = decano;
     }
@@ -42,7 +45,7 @@ public class Facultad implements Serializable{
         return decano;
     }
 
-    public void setDecano(Persona decano) {
+    public void setDecano(Profesor decano) {
         this.decano = decano;
     }
 

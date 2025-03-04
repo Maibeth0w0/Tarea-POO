@@ -1,38 +1,31 @@
 package com.poo.servicios;
 
+import com.poo.persistencia.InscripcionesPersonas;
+import com.poo.repository.InscripcionesPersonasRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import com.poo.modelos.Persona;
-import com.poo.persistencia.InscripcionesPersonas;
-import com.poo.repository.InscripcionesPersonasRepository;
-
 @Service
 public class InscripcionesPersonasService {
-    
+
     @Autowired
-    private InscripcionesPersonasRepository inscripcionesPersonasRepository;
+    private InscripcionesPersonasRepository repository;
 
-    public List<InscripcionesPersonas> obtenerTodasLasInscripcionesPersonas() {
-        return inscripcionesPersonasRepository.findAll();
+    public List<InscripcionesPersonas> obtenerTodas() {
+        return repository.findAll();
     }
 
-    public Optional<InscripcionesPersonas> obtenerInscripcionPersonaPorId(Persona persona) {
-        return inscripcionesPersonasRepository.findById(persona);
+    public Optional<InscripcionesPersonas> obtenerPorId(Long id) {
+        return repository.findById(id);
     }
 
-    public InscripcionesPersonas guardarInscripcionPersona(InscripcionesPersonas inscripcionPersona) {
-        return inscripcionesPersonasRepository.save(inscripcionPersona);
+    public InscripcionesPersonas guardar(InscripcionesPersonas inscripciones) {
+        return repository.save(inscripciones);
     }
 
-    public void eliminarInscripcionPersona(Persona persona) {
-        inscripcionesPersonasRepository.deleteById(persona);
-    }
-
-    public InscripcionesPersonas actualizarInscripcionPersona(InscripcionesPersonas inscripcionPersona) {
-        return inscripcionesPersonasRepository.save(inscripcionPersona);
+    public void eliminar(Long id) {
+        repository.deleteById(id);
     }
 }

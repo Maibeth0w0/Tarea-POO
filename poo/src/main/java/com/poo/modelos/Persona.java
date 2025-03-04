@@ -1,29 +1,46 @@
 package com.poo.modelos;
-import java.io.Serializable;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import java.io.Serializable;
+import jakarta.persistence.*;
 
 @Entity
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "tipo", discriminatorType = DiscriminatorType.STRING)
 public class Persona implements Serializable {
+    
+    public enum TipoPersona {
+        ESTUDIANTE, PROFESOR
+    }
+
     private static final long serialVersionUID = 1L;
     
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+    
+    @Column(name = "nombres", length = 100)
     private String nombres;
+    
+    @Column(name = "apellidos", length = 100)
     private String apellidos;
+    
+    @Column(name = "email", unique = true, length = 100)
     private String email;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "tipo", insertable = false, updatable = false)
+    private TipoPersona tipo;
     
     public Persona() {
     }
     
-    public Persona(Integer id, String nombres, String apellidos, String email) {
-        this.id = id;
+    public Persona(String nombres, String apellidos, String email, TipoPersona tipo) {
         this.nombres = nombres;
         this.apellidos = apellidos;
         this.email = email;
+        this.tipo = tipo;
     }
-    
+
     public Integer getId() {
         return id;
     }
@@ -55,16 +72,23 @@ public class Persona implements Serializable {
     public void setEmail(String email) {
         this.email = email;
     }
+
+    public TipoPersona getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(TipoPersona tipo) {
+        this.tipo = tipo;
+    }
     
-    // Método toString()
     @Override
     public String toString() {
-        return "Persona{" +
-            "id=" + id +
-            ", nombres='" + nombres + '\'' +
-            ", apellidos='" + apellidos + '\'' +
-            ", email='" + email + '\'' +
-            '}';
+        return new StringBuilder()
+            .append("Persona{id=").append(id)
+            .append(", nombres='").append(nombres)
+            .append("', apellidos='").append(apellidos)
+            .append("', email='").append(email)
+            .append("', tipo=").append(tipo)
+            .append('}').toString();
     }
 }
-

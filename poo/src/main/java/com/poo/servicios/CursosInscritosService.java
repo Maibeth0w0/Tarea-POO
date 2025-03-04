@@ -6,7 +6,6 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.poo.modelos.Inscripcion;
 import com.poo.persistencia.CursosInscritos;
 import com.poo.repository.CursosInscritosRepository;
 
@@ -16,23 +15,28 @@ public class CursosInscritosService {
     @Autowired
     private CursosInscritosRepository cursosInscritosRepository;
 
-    public List<CursosInscritos> obtenerTodosLosCursosInscritos() {
+    public List<CursosInscritos> findAll() {
         return cursosInscritosRepository.findAll();
     }
 
-    public Optional<CursosInscritos> obtenerCursoInscritoPorId(Inscripcion inscripcion) {
-        return cursosInscritosRepository.findById(inscripcion);
+    public Optional<CursosInscritos> findById(Long id) {
+        return cursosInscritosRepository.findById(id);
     }
 
-    public CursosInscritos guardarCursoInscrito(CursosInscritos cursoInscrito) {
-        return cursosInscritosRepository.save(cursoInscrito);
+    public CursosInscritos save(CursosInscritos cursosInscritos) {
+        return cursosInscritosRepository.save(cursosInscritos);
     }
 
-    public void eliminarCursoInscrito(Inscripcion inscripcion) {
-        cursosInscritosRepository.deleteById(inscripcion);
+    public void deleteById(Long id) {
+        cursosInscritosRepository.deleteById(id);
     }
 
-    public CursosInscritos actualizarCursoInscrito(CursosInscritos cursoInscrito) {
-        return cursosInscritosRepository.save(cursoInscrito);
+    public CursosInscritos update(Long id, CursosInscritos cursosInscritos) {
+        if (cursosInscritosRepository.existsById(id)) {
+            return cursosInscritosRepository.save(cursosInscritos);
+        } else {
+            throw new RuntimeException("Curso no encontrado con id: " + id);
+        }
     }
+
 }

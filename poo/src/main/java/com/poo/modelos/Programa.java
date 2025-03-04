@@ -1,26 +1,32 @@
 package com.poo.modelos;
-import java.io.Serializable;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import java.io.Serializable;
+import jakarta.persistence.*;
 
 @Entity
 public class Programa implements Serializable{
 
-    @Id
     private static final long serialVersionUID = 1L;
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+    
     private String nombre;
+    
     private Double duracion;
+    
+    @Column(unique = true)
     private String registro;
+    
+    @ManyToOne
+    @JoinColumn(name = "id_facultad")
     private Facultad facultad;
 
     public Programa(){
     }
 
-    public Programa( Integer id, String nombre, Double duracion, String registro, Facultad facultad){
-        this.id = id;
+    public Programa(String nombre, Double duracion, String registro, Facultad facultad) {
         this.nombre = nombre;
         this.duracion = duracion;
         this.registro = registro;
@@ -68,13 +74,13 @@ public class Programa implements Serializable{
     }
 
     @Override
-    public String toString(){
-        return "Programa{Id=" + id +
-        ", nombre=" + nombre +
-        ", duración=" + duracion +
-        ", registro=" + registro +
-        ", facultad=" + facultad.getNombre() +
-        "}";
+    public String toString() {
+        return "Programa{" +
+            "id=" + id +
+            ", nombre='" + nombre + '\'' +
+            ", duracion=" + duracion +
+            ", registro='" + registro + '\'' +
+            ", facultad=" + (facultad != null ? facultad.getNombre() : "Sin facultad") +
+            '}';
     }
-
 }

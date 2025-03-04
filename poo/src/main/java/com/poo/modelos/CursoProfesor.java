@@ -1,21 +1,36 @@
 package com.poo.modelos;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+
+import jakarta.persistence.*;
 
 @Entity
 public class CursoProfesor {
     
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
+    
+    @ManyToOne
+    @JoinColumn(name = "id_profesor", nullable = false)
     private Profesor profesor;
-    private Integer anno;
-    private Integer semestre;
+    
+    @ManyToOne
+    @JoinColumn(name = "id_curso", nullable = false)
     private Curso curso;
     
-    public CursoProfesor(Profesor profesor, Integer anno, Integer semestre, Curso curso) {
+    private Integer anno;
+    private Integer semestre;
+
+    public CursoProfesor() {}
+
+    public CursoProfesor(Profesor profesor, Curso curso, Integer anno, Integer semestre) {
         this.profesor = profesor;
+        this.curso = curso;
         this.anno = anno;
         this.semestre = semestre;
-        this.curso = curso;
+    }
+
+    public Integer getId() {
+        return id;
     }
 
     public Profesor getProfesor() {
@@ -24,6 +39,14 @@ public class CursoProfesor {
 
     public void setProfesor(Profesor profesor) {
         this.profesor = profesor;
+    }
+
+    public Curso getCurso() {
+        return curso;
+    }
+
+    public void setCurso(Curso curso) {
+        this.curso = curso;
     }
 
     public Integer getAnno() {
@@ -42,23 +65,14 @@ public class CursoProfesor {
         this.semestre = semestre;
     }
 
-    public Curso getCurso() {
-        return curso;
-    }
-
-    public void setCurso(Curso curso) {
-        this.curso = curso;
-    }
-
     @Override
     public String toString() {
-        return "CursoProfesor {profesor=" + profesor.getNombres() + " "
-        + profesor.getApellidos() +
-        ", año=" + anno +
-        ", semestre=" + semestre +
-        ", curso=" + curso.getNombre() +
-        "}";
+        return "CursoProfesor{" +
+            "id=" + id +
+            ", profesor=" + (profesor != null ? profesor.getNombres() + " " + profesor.getApellidos() : "null") +
+            ", curso=" + (curso != null ? curso.getNombre() : "null") +
+            ", anno=" + anno +
+            ", semestre=" + semestre +
+            '}';
     }
-
-    
 }

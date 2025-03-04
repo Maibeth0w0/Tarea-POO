@@ -1,19 +1,28 @@
 package com.poo.modelos;
+import jakarta.persistence.Column;
+import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 
 @Entity
+@DiscriminatorValue("PROFESOR")
 public class Profesor extends Persona {
     
-    @Id
+    @Column(name = "tipo_contrato")
     private String tipoContrato;
+    
+    @ManyToOne
+    @JoinColumn(name = "id_facultad")
+    private Facultad facultad;
     
     public Profesor() {
     }
     
-    public Profesor(Integer id, String nombres, String apellidos, String email, String tipoContrato) {
-        super(id, nombres, apellidos, email);
+    public Profesor(String nombres, String apellidos, String email, String tipoContrato, Facultad facultad) {
+        super(nombres, apellidos, email, TipoPersona.PROFESOR);
         this.tipoContrato = tipoContrato;
+        this.facultad = facultad;
     }
     
     public String getTipoContrato() {
