@@ -25,17 +25,16 @@ public class CursosProfesoresPanel extends JPanel {
     private DefaultTableModel modeloTabla;
     private JTextField txtAnno, txtSemestre;
     private JComboBox<String> cbCurso, cbProfesor;
-    private JButton btnAgregar, btnEditar, btnEliminar;
+    private JButton btnAgregar, btnEditar, btnEliminar, btnCargarBD;
 
-    private CursosProfesores cursosProfesores;  // Objeto de persistencia
+    private CursosProfesores cursosProfesores;
 
     public CursosProfesoresPanel(CursosProfesores cursosProfesores) {
         this.cursosProfesores = cursosProfesores;
-        
         setLayout(new BorderLayout());
 
         cursosProfesores = new CursosProfesores();
-        cursosProfesores.cargarDatos(); // Cargar datos desde archivo
+        cursosProfesores.cargarDatos();
 
         // Panel superior con formulario
         JPanel panelFormulario = new JPanel(new GridLayout(2, 4, 10, 10));
@@ -59,21 +58,23 @@ public class CursosProfesoresPanel extends JPanel {
         modeloTabla = new DefaultTableModel(new String[]{"Año", "Semestre", "Curso", "Profesor"}, 0);
         tabla = new JTable(modeloTabla);
         JScrollPane scrollTabla = new JScrollPane(tabla);
-
-        cargarTabla(); // Llenar la tabla con datos de persistencia
+        cargarTabla();
 
         // Panel inferior con botones
         JPanel panelBotones = new JPanel();
         btnAgregar = new JButton("Agregar");
         btnEditar = new JButton("Editar");
         btnEliminar = new JButton("Eliminar");
+        btnCargarBD = new JButton("Cargar lista a BD");
 
         panelBotones.add(btnAgregar);
         panelBotones.add(btnEditar);
         panelBotones.add(btnEliminar);
+        panelBotones.add(btnCargarBD);
 
         // Listeners para botones
         btnAgregar.addActionListener(e -> agregarCursoProfesor());
+        btnCargarBD.addActionListener(e -> cargarListaEnBD());
 
         // Agregar componentes al panel principal
         add(panelFormulario, BorderLayout.NORTH);
@@ -82,7 +83,7 @@ public class CursosProfesoresPanel extends JPanel {
     }
 
     private void cargarTabla() {
-        modeloTabla.setRowCount(0); // Limpiar tabla antes de cargar datos
+        modeloTabla.setRowCount(0);
         List<CursoProfesor> lista = cursosProfesores.getListadoCursoProfesores();
         for (CursoProfesor cp : lista) {
             modeloTabla.addRow(new Object[]{
@@ -100,45 +101,37 @@ public class CursosProfesoresPanel extends JPanel {
         String nombreCurso = (String) cbCurso.getSelectedItem();
         String nombreProfesor = (String) cbProfesor.getSelectedItem();
     
-        // Validación de campos vacíos
         if (anno.isEmpty() || semestre.isEmpty() || nombreCurso == null || nombreProfesor == null) {
             JOptionPane.showMessageDialog(this, "Todos los campos son obligatorios", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
-    
-        // Validación de que año y semestre sean números enteros
+
         if (!anno.matches("\\d+") || !semestre.matches("\\d+")) {
             JOptionPane.showMessageDialog(this, "El año y el semestre deben ser números enteros", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
-    
-        int annoInt = Integer.parseInt(anno); // Conversión a int
-        int semestreInt = Integer.parseInt(semestre); // Conversión a int
-    
-        // Obtener los objetos Curso y Profesor a partir de sus nombres
+
+        int annoInt = Integer.parseInt(anno);
+        int semestreInt = Integer.parseInt(semestre);
+
         Curso cursoObj = cursosProfesores.obtenerCursoPorNombre(nombreCurso);
         Profesor profesorObj = cursosProfesores.obtenerProfesorPorNombre(nombreProfesor);
-    
-        if (cursoObj == null) {
-            JOptionPane.showMessageDialog(this, "El curso seleccionado no existe", "Error", JOptionPane.ERROR_MESSAGE);
+
+        if (cursoObj == null || profesorObj == null) {
+            JOptionPane.showMessageDialog(this, "Curso o profesor no existen", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
-    
-        if (profesorObj == null) {
-            JOptionPane.showMessageDialog(this, "El profesor seleccionado no existe", "Error", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-    
-        // Creación del objeto CursoProfesor y registro
+
         CursoProfesor nuevo = new CursoProfesor(profesorObj, annoInt, semestreInt, cursoObj);
         cursosProfesores.inscribirCursoProfesores(nuevo);
         cursosProfesores.guardarInformacion();
-    
-        // Actualizar la tabla y mostrar mensaje de éxito
+
         cargarTabla();
         JOptionPane.showMessageDialog(this, "Asignación guardada exitosamente", "Éxito", JOptionPane.INFORMATION_MESSAGE);
     }
-    
 
-    
+    private void cargarListaEnBD() {
+        cursosProfesores.guardarInformacion();
+        JOptionPane.showMessageDialog(this, "Lista cargada en la base de datos correctamente", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+    }
 }
